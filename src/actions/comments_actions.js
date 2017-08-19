@@ -1,6 +1,6 @@
 import axios from 'axios'
 export const ADD_COMMENT='ADD_COMMENT'
-export const REMOVE_COMMENT='REMOVE_COMMENT'
+export const DELETE_COMMENT='DELETE_COMMENT'
 export const FETCH_COMMENTS='FETCH_COMMENTS'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
@@ -76,6 +76,22 @@ export function voteComment(id,commentId,option){
                 payload:{
                     data,
                     id
+                }
+            })
+        })
+    }
+}
+
+export function deleteComment(postId,commentId){
+    const URL = `${API}/comments/${commentId}`
+    const request = axios.delete(URL,{headers})
+    return dispatch => {
+        request.then(()=>{
+            dispatch({
+                type:DELETE_COMMENT,
+                payload:{
+                    postId,
+                    commentId
                 }
             })
         })

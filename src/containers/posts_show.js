@@ -1,7 +1,10 @@
+import _ from 'lodash'
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { fetchPost, votePost, editPost, deletePost } from '../actions/posts_actions'
+import { voteComment, deleteComment } from '../actions/comments_actions'
 import Options from '../components/options'
 import PostComments from '../components/post_comments'
 class PostsShow extends Component{
@@ -12,7 +15,9 @@ class PostsShow extends Component{
         }
     }
     render(){
-        const {post,editPost,comments} = this.props
+        const {post,editPost,comments,deletePost} = this.props
+        const sort = this.props.sorts.order === 'byVotes' ? _.sortBy(comments,(comment)=>-comment.voteScore) : _.sortBy(comments,(comment)=>-comment.timeStamp)
+        console.log(sort)
         if(!post){
             return <div>Loading...</div>
         }
@@ -48,18 +53,27 @@ class PostsShow extends Component{
                        <hr/>
                     </div>
                 </div>
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a className="nav-link active" onClick={()=>this.props.orderByTime('comments')} href="#">Newest</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" onClick={()=>this.props.orderByVotes('comments')} href="#">Votes</a>
+                    </li>
+                </ul>
                 <PostComments
-                    comments={comments}
+                    comments={sort}
                     postId={post.id}
                 />
             </div>
         )
     }
 }
-function mapStateToProps({posts, comments},ownProps){
+function mapStateToProps({posts, comments, sorts},ownProps){
     return{
         post:posts[ownProps.match.params.postId],
-        comments: comments[ownProps.match.params.postId]
+        comments: comments[ownProps.match.params.postId],
+        sorts: sorts.comments
     }
 }
-export default connect(mapStateToProps,{ fetchPost, editPost, deletePost })(PostsShow)
+export default connect(mapStateToProps,{ fetchPost, editPost, deletePost, orderByTime, orderByVotes  })(PostsShow)

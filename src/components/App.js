@@ -16,6 +16,7 @@ class App extends Component {
           <Route path="/posts/:postId/comment/new" component={CommentForm} />
           <Route path="/posts/:postId/comment/edit/:commentId" component={CommentForm} />
           <Route path="/categories/:category/:postId" component={PostsShow} />
+          <Route path="/categories/:category" component={PostsIndex} />
           <Route path="/" component={PostsIndex} />
         </Switch>
       </div>

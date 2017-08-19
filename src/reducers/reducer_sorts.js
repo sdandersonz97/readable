@@ -1,4 +1,4 @@
-import {ORDER_BY_TIME,ORDER_BY_VOTES} from '../actions/sortActions'
+import {ORDER_BY_TIME,ORDER_BY_VOTES} from '../actions/sorts_actions'
 
 const initialSortState={
     posts:{
@@ -9,7 +9,7 @@ const initialSortState={
     }
 }
 
-export default function sort(state = initialSortState,action){
+export default function sorts(state = initialSortState,action){
     const {type,order,element} = action
     switch(type){
         case ORDER_BY_TIME:

@@ -2,9 +2,11 @@ import _ from 'lodash'
 import React,{Component} from 'react'
 import Options from './options'
 import { Link } from 'react-router-dom'
-import { voteComment } from '../actions/comments_actions'
+import { voteComment, deleteComment } from '../actions/comments_actions'
+
 import { connect } from 'react-redux'
 const PostsComments = (props) => {
+
     return(
         <div>
             <ul className="list-posts">
@@ -28,6 +30,7 @@ const PostsComments = (props) => {
                                     <Options
                                         path={`/posts/${props.postId}/comment/edit/${comment.id}`}
                                         comment={comment}
+                                        onClickDelete={props.deleteComment}
                                     />        
                                 </div>
                             </div>
@@ -39,4 +42,4 @@ const PostsComments = (props) => {
         </div>
     )
 }
-export default connect(null,{ voteComment })(PostsComments)
+export default connect(null,{ voteComment, deleteComment })(PostsComments)

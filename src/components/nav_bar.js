@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import Categories from '../containers/categories'
 const NavBar = (props) =>{
     return(
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -13,12 +13,8 @@ const NavBar = (props) =>{
                     <li className="nav-item active">
                         <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                     </li>
-                    <li className="nav-item dropdown">
-                        <Link className="nav-link dropdown-toggle" data-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Categories</Link>
-                        <div className="dropdown-menu">
-                            <Link className="dropdown-item" to="#">Action</Link>
-                        </div>
-                    </li>
+                    <Categories/>
+                    
                     <li className="nav-item">
                         <Link className="nav-link" to="/posts/new">Add a Post</Link>
                     </li>

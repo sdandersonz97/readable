@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React,{Component} from 'react'
 import { fetchPosts, votePost } from '../actions/posts_actions'
+import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { fetchComments } from '../actions/comments_actions'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -9,11 +10,11 @@ class PostsIndex extends Component {
         this.props.fetchPosts()
     }
     renderPosts(){
-        const { posts, votePost, comments } = this.props
-        
-        return _.map(posts, post=>{
+        const { posts, votePost, comments, sorts } = this.props
+        const sort = sorts.order === 'byVotes' ? _.sortBy(posts,(post)=>-post.voteScore) : _.sortBy(posts,(post)=>-post.timeStamp)
+        return _.map(sort, post=>{
             const { id, voteScore, title, author, category } = post
- 
+
             return (
                 <li className="list-posts-item" key={id}>
                     <div className="row">
@@ -44,6 +45,14 @@ class PostsIndex extends Component {
     render(){
         return(
             <div className="container">
+                <ul className="nav nav-tabs">
+                    <li className="nav-item">
+                        <a className="nav-link active" onClick={()=>this.props.orderByTime('posts')} href="#">Newest</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" onClick={()=>this.props.orderByVotes('posts')} href="#">Votes</a>
+                    </li>
+                </ul>
                 <ul className="list-posts">
                     {this.renderPosts()}
                 </ul>
@@ -51,7 +60,14 @@ class PostsIndex extends Component {
         )
     }
 }
-function mapStateToProps({posts, comments}){
-    return { posts, comments }
+function mapStateToProps({posts, comments,sorts},ownProps){
+    if(ownProps.match.params.category){
+        return {
+            posts: _.omitBy(posts,(post)=>post.category !== ownProps.match.params.category),
+            comments,
+            sorts: sorts.posts
+        }
+    }
+    return { posts, comments,sorts: sorts.posts }
 }
-export default connect(mapStateToProps,{fetchPosts, fetchComments, votePost})(PostsIndex)
+export default connect(mapStateToProps,{fetchPosts, fetchComments, votePost, orderByTime, orderByVotes })(PostsIndex)
