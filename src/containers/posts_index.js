@@ -27,26 +27,27 @@ class PostsIndex extends Component {
     renderPosts(){
         const { posts, comments, sorts } = this.props
         const sort = sorts.order === 'byVotes' ? _.sortBy(posts,(post)=>-post.voteScore) : _.sortBy(posts,(post)=>-post.timeStamp)
-        return _.map(sort, post=>{
-            const { id, voteScore, title, author, category } = post
-            return (
-                <li className="list-posts-item" key={id}>
-                    <div className="row">
-                        <div className="col-md-1">
-                            <div className="votes row justify-content-md-center">
-                                {this.renderVotes(id, voteScore)}
+        return _.map(sort, post => {
+            const { id, voteScore, title, author, category, deleted } = post
+            if(deleted === false){
+                return(
+                    <li className="list-posts-item" key={id}>
+                        <div className="row">
+                            <div className="col-md-1">
+                                <div className="votes row justify-content-md-center">
+                                    {this.renderVotes(id, voteScore)}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-md-9 align-self-center">
-                            <Link className="title" to={`/categories/${category}/${id}`}>{title} By: {author} </Link>
-                        </div>
-                        <div className="col-md-2 align-self-center">
-                            {_.size(comments[id])}<br/>
-                            <small>comments</small>
-                        </div>
-                    </div>               
-                </li>
-            )
+                            <div className="col-md-9 align-self-center">
+                                <Link className="title" to={`/categories/${category}/${id}`}>{title} By: {author} </Link>
+                            </div>
+                            <div className="col-md-2 align-self-center">
+                                {_.size(comments[id])}<br/>
+                                <small>comments</small>
+                            </div>
+                        </div>               
+                    </li>
+                )}
         })
     }
     render(){

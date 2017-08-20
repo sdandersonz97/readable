@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { fetchPost, votePost, deletePost } from '../actions/posts_actions'
 import Options from '../components/options'
 import PostComments from './post_comments'
@@ -59,8 +59,8 @@ class PostsShow extends Component{
                                 <p className="lead">{post.body}</p>
                                 <p><em><small>
                                     {post.category} <br/>
-                                    {post.author} 
-                                    {time} <br/>                       
+                                    {post.author}  <br/> 
+                                    {time}                      
                                 </small></em></p>
                                 <Link to={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comments/add`}>Add a comment</Link>
                             </div>

@@ -12,7 +12,7 @@ const Options = (props) => {
             </Link>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <Link className="dropdown-item" to={path}>Edit</Link>
-                <Link className="dropdown-item" onClick={()=>onClickDelete(props.match.params.postId,CurrentId,()=>props.history.push('/'))} to="#">Remove</Link>
+                <Link className="dropdown-item" onClick={()=>onClickDelete(props.match.params.postId,CurrentId,props.history.push('/'))} to="#">Remove</Link>
             </div>
         </div>    
     )
