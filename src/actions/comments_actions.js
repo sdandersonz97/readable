@@ -2,6 +2,7 @@ import axios from 'axios'
 export const ADD_COMMENT='ADD_COMMENT'
 export const DELETE_COMMENT='DELETE_COMMENT'
 export const FETCH_COMMENTS='FETCH_COMMENTS'
+export const FETCH_COMMENT='FETCH_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 let token = localStorage.token
@@ -23,6 +24,22 @@ export function  fetchComments(id){
                 payload:{
                     data,
                     id
+                }
+            })
+        })
+    }
+        
+}
+export function  fetchComment(postId,commentId){
+    const URL = `${API}/comments/${commentId}`
+    const request = axios.get(URL,{headers})
+    return dispatch =>{
+        request.then(({data})=>{
+            dispatch({
+                type:FETCH_COMMENT,
+                payload:{
+                    data,
+                    postId
                 }
             })
         })

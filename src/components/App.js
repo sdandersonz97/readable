@@ -13,8 +13,8 @@ class App extends Component {
         <Switch>
           <Route path="/posts/new" component={PostsForm} />
           <Route path="/posts/edit/:postId" component={PostsForm} />
-          <Route path="/posts/:postId/comment/new" component={CommentForm} />
-          <Route path="/posts/:postId/comment/edit/:commentId" component={CommentForm} />
+          <Route path="/categories/:category/posts/:postId/comments/add/" component={CommentForm} />
+          <Route path="/categories/:category/posts/:postId/comment/edit/:commentId" component={CommentForm} />
           <Route path="/categories/:category/:postId" component={PostsShow} />
           <Route path="/categories/:category" component={PostsIndex} />
           <Route path="/" component={PostsIndex} />

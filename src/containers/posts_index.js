@@ -5,29 +5,36 @@ import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { fetchComments } from '../actions/comments_actions'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import NavOrderTab from '../components/nav_order_tab'
 class PostsIndex extends Component {
     componentDidMount(){
         this.props.fetchPosts()
     }
+    renderVotes(id, voteScore){
+        const { votePost } = this.props
+        return(
+            <div className="col-md-1">
+                <Link onClick={()=>votePost(id,'upVote')} to="#"><i className="material-icons" >keyboard_arrow_up</i></Link>
+                <div className="mini-counts">
+                    {voteScore} <br/>
+                    Votes
+                </div>
+                <Link onClick={()=>votePost(id,'downVote')} to="#"><i className="material-icons" >keyboard_arrow_down</i></Link>
+            </div>
+        )
+    }
     renderPosts(){
-        const { posts, votePost, comments, sorts } = this.props
+        const { posts, comments, sorts } = this.props
         const sort = sorts.order === 'byVotes' ? _.sortBy(posts,(post)=>-post.voteScore) : _.sortBy(posts,(post)=>-post.timeStamp)
         return _.map(sort, post=>{
             const { id, voteScore, title, author, category } = post
-
             return (
                 <li className="list-posts-item" key={id}>
                     <div className="row">
                         <div className="col-md-1">
                             <div className="votes row justify-content-md-center">
-                                <div  className="col-md-1">
-                                    <Link onClick={()=>votePost(id,'upVote')} to="#"><i className="material-icons" >keyboard_arrow_up</i></Link>
-                                    <div className="mini-counts">
-                                        {voteScore} <br/>
-                                        Votes
-                                    </div>
-                                    <Link onClick={()=>votePost(id,'downVote')} to="#"><i className="material-icons" >keyboard_arrow_down</i></Link>
-                                </div>
+                                {this.renderVotes(id, voteScore)}
                             </div>
                         </div>
                         <div className="col-md-9 align-self-center">
@@ -45,20 +52,26 @@ class PostsIndex extends Component {
     render(){
         return(
             <div className="container">
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <a className="nav-link active" onClick={()=>this.props.orderByTime('posts')} href="#">Newest</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" onClick={()=>this.props.orderByVotes('posts')} href="#">Votes</a>
-                    </li>
-                </ul>
+                <NavOrderTab
+                    onClickOrderByTime={this.props.orderByTime}
+                    onClickOrderByVotes={this.props.orderByVotes}
+                    element='posts'
+                />
                 <ul className="list-posts">
                     {this.renderPosts()}
                 </ul>
             </div>
         )
     }
+}
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+        fetchPosts, 
+        fetchComments, 
+        votePost,
+        orderByTime, 
+        orderByVotes 
+    },dispatch)
 }
 function mapStateToProps({posts, comments,sorts},ownProps){
     if(ownProps.match.params.category){
@@ -70,4 +83,4 @@ function mapStateToProps({posts, comments,sorts},ownProps){
     }
     return { posts, comments,sorts: sorts.posts }
 }
-export default connect(mapStateToProps,{fetchPosts, fetchComments, votePost, orderByTime, orderByVotes })(PostsIndex)
+export default connect(mapStateToProps,mapDispatchToProps)(PostsIndex)

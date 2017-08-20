@@ -6,6 +6,7 @@
       flex-direction: column;
   padding-left: 0;
   margin-bottom: 0;
+  list-style-type: none;
 }
 .list-posts-item {
   position: relative;

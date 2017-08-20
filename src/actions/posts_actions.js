@@ -8,8 +8,7 @@ export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 
 export function addPost(values,callback){
-    values['id'] = Math.random().toString(36).substr(-8)
-    values['timestamp'] = Date.now()
+    
     const URL = `${API}/posts`
     const request = axios.post(URL,values,{headers})
     return dispatch => {

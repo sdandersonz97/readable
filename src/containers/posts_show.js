@@ -1,12 +1,10 @@
-import _ from 'lodash'
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { orderByTime, orderByVotes } from '../actions/sorts_actions'
-import { fetchPost, votePost, editPost, deletePost } from '../actions/posts_actions'
-import { voteComment, deleteComment } from '../actions/comments_actions'
+import { fetchPost, votePost, deletePost } from '../actions/posts_actions'
 import Options from '../components/options'
-import PostComments from '../components/post_comments'
+import PostComments from './post_comments'
+import { bindActionCreators } from 'redux'
 class PostsShow extends Component{
     componentDidMount(){
         const { postId } = this.props.match.params
@@ -14,10 +12,21 @@ class PostsShow extends Component{
             this.props.fetchPost(postId)
         }
     }
+    renderVotes(id, voteScore){
+        const { votePost } = this.props
+        return(
+            <div className="col-md-1">
+                <Link onClick={()=>votePost(id,'upVote')} to="#"><i className="material-icons" >keyboard_arrow_up</i></Link>
+                <div className="mini-counts">
+                    {voteScore} <br/>
+                    Votes
+                </div>
+                <Link onClick={()=>votePost(id,'downVote')} to="#"><i className="material-icons" >keyboard_arrow_down</i></Link>
+            </div>
+        )
+    }
     render(){
-        const {post,editPost,comments,deletePost} = this.props
-        const sort = this.props.sorts.order === 'byVotes' ? _.sortBy(comments,(comment)=>-comment.voteScore) : _.sortBy(comments,(comment)=>-comment.timeStamp)
-        console.log(sort)
+        const {post, deletePost} = this.props
         if(!post){
             return <div>Loading...</div>
         }
@@ -41,39 +50,36 @@ class PostsShow extends Component{
                         <hr/>
                     </div>
                     <div className="col-md-12">
-                        <p className="lead">{post.body}</p>
-                    </div>
-                    <div className="col-md-12">
-                        <p><em><small>
-                            {post.category} <br/>
-                            {post.timestamp} <br/>
-                            {post.author}                        
-                       </small></em></p>
-                       <Link to={`/posts/${post.id}/comment/new`}>Add a comment</Link>
-                       <hr/>
+                        <div className="row">
+                            {this.renderVotes(post.id,post.voteScore)}
+                            <div className="col-md-11">
+                                <p className="lead">{post.body}</p>
+                                <p><em><small>
+                                    {post.category} <br/>
+                                    {post.timestamp} <br/>
+                                    {post.author}                        
+                                </small></em></p>
+                                <Link to={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comments/add`}>Add a comment</Link>
+                            </div>
+                        </div>
+                        <hr/>
                     </div>
                 </div>
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <a className="nav-link active" onClick={()=>this.props.orderByTime('comments')} href="#">Newest</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" onClick={()=>this.props.orderByVotes('comments')} href="#">Votes</a>
-                    </li>
-                </ul>
-                <PostComments
-                    comments={sort}
-                    postId={post.id}
-                />
+                <PostComments/>
             </div>
         )
     }
 }
-function mapStateToProps({posts, comments, sorts},ownProps){
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+        fetchPost, 
+        votePost, 
+        deletePost
+    }, dispatch)
+}
+function mapStateToProps({ posts },ownProps){
     return{
         post:posts[ownProps.match.params.postId],
-        comments: comments[ownProps.match.params.postId],
-        sorts: sorts.comments
     }
 }
-export default connect(mapStateToProps,{ fetchPost, editPost, deletePost, orderByTime, orderByVotes  })(PostsShow)
+export default connect(mapStateToProps,mapDispatchToProps)(PostsShow)
