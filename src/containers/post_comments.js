@@ -7,7 +7,7 @@ import { voteComment, deleteComment, fetchComments} from '../actions/comments_ac
 import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { CSSTransitionGroup } from 'react-transition-group'
 class PostsComments extends Component {
     componentDidMount(){
         fetchComments(this.props.match.params.postId)
@@ -28,9 +28,6 @@ class PostsComments extends Component {
     render(){
         const { sorts, comments, orderByTime, orderByVotes, deleteComment } = this.props
         const sort = sorts.order === 'byVotes' ? _.sortBy(comments,(comment)=>-comment.voteScore) : _.sortBy(comments,(comment)=>-comment.timeStamp)
-        if(!comments){
-            return <div>Loading...</div>
-        }
         return(
             <div>
                  <p className="h5">{_.size(comments)} Comments</p>
@@ -42,27 +39,33 @@ class PostsComments extends Component {
                 />
                
                 <ul className="list-posts">
-                    {_.map(sort,(comment)=>{
-                        return(
-                            <li  key={comment.id}>
-                                <div className="row">
-                                    {this.renderVotes(comment.id, comment.voteScore)}
-                                    <div className="col-md-10">
-                                        <strong> {comment.author} </strong><br/>
-                                        {comment.body}
+                    <CSSTransitionGroup
+                        transitionName="fade"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={500}
+                    >
+                        {_.map(sort,(comment)=>{
+                            return(
+                                <li  key={comment.id}>
+                                    <div className="row">
+                                        {this.renderVotes(comment.id, comment.voteScore)}
+                                        <div className="col-md-10">
+                                            <strong> {comment.author} </strong><br/>
+                                            {comment.body}
+                                        </div>
+                                        <div className="col-md-1">
+                                            <Options
+                                                path={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comment/edit/${comment.id}`}
+                                                comment={comment}
+                                                onClickDelete={deleteComment}
+                                            />        
+                                        </div>
                                     </div>
-                                    <div className="col-md-1">
-                                        <Options
-                                            path={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comment/edit/${comment.id}`}
-                                            comment={comment}
-                                            onClickDelete={deleteComment}
-                                        />        
-                                    </div>
-                                </div>
-                                <hr/>
-                            </li>
-                        )
-                    })}
+                                    <hr/>
+                                </li>
+                            )
+                        })}
+                    </CSSTransitionGroup>
                 </ul>
             </div>
         )

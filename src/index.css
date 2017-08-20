@@ -37,3 +37,11 @@ a{
 .title{
   padding-left:15%; 
 }
+.fade-leave {
+  opacity: 1.0;
+}
+
+.fade-leave-active{
+  opacity: 0;
+  transition: .2s ease-out all;
+}

@@ -5,6 +5,7 @@ import { fetchPost, votePost, deletePost } from '../actions/posts_actions'
 import Options from '../components/options'
 import PostComments from './post_comments'
 import { bindActionCreators } from 'redux'
+import moment from 'moment'
 class PostsShow extends Component{
     componentDidMount(){
         const { postId } = this.props.match.params
@@ -27,9 +28,11 @@ class PostsShow extends Component{
     }
     render(){
         const {post, deletePost} = this.props
+        
         if(!post){
             return <div>Loading...</div>
         }
+        let time = moment(post.timestamp).format("h:mm:ss DD-MM-YYYY ")
         return(
             <div className="container">
                 <Link to="/"><i className="material-icons">arrow_back</i></Link>
@@ -56,8 +59,8 @@ class PostsShow extends Component{
                                 <p className="lead">{post.body}</p>
                                 <p><em><small>
                                     {post.category} <br/>
-                                    {post.timestamp} <br/>
-                                    {post.author}                        
+                                    {post.author} 
+                                    {time} <br/>                       
                                 </small></em></p>
                                 <Link to={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comments/add`}>Add a comment</Link>
                             </div>
