@@ -56,10 +56,7 @@ export function addComment(id,values,callback){
         request.then(({data})=>{
             dispatch({
                 type:ADD_COMMENT,
-                payload:{
-                    data,
-                    id
-                }
+                payload:data
             })
         }).then(()=>callback())
     }

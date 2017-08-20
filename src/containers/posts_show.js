@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
-import { fetchPost, votePost, deletePost } from '../actions/posts_actions'
+import { Link } from 'react-router-dom'
+import { fetchPost, votePost } from '../actions/posts_actions'
 import Options from '../components/options'
 import PostComments from './post_comments'
 import { bindActionCreators } from 'redux'
@@ -27,7 +27,7 @@ class PostsShow extends Component{
         )
     }
     render(){
-        const {post, deletePost} = this.props
+        const {post} = this.props
         
         if(!post){
             return <div>Loading...</div>
@@ -45,7 +45,6 @@ class PostsShow extends Component{
                             <div className="col-md-1">
                                 <Options
                                     post={post}
-                                    onClickDelete={deletePost}
                                     path={`/posts/edit/${post.id}`}
                                 />
                             </div>
@@ -77,7 +76,6 @@ function mapDispatchToProps(dispatch){
     return bindActionCreators({
         fetchPost, 
         votePost, 
-        deletePost
     }, dispatch)
 }
 function mapStateToProps({ posts },ownProps){

@@ -3,7 +3,7 @@ import React,{Component} from 'react'
 import Options from '../components/options'
 import NavOrderTab from '../components/nav_order_tab'
 import { Link, withRouter } from 'react-router-dom'
-import { voteComment, deleteComment, fetchComments} from '../actions/comments_actions'
+import { voteComment, fetchComments} from '../actions/comments_actions'
 import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -26,7 +26,7 @@ class PostsComments extends Component {
         ) 
     }
     render(){
-        const { sorts, comments, orderByTime, orderByVotes, deleteComment } = this.props
+        const { sorts, comments, orderByTime, orderByVotes } = this.props
         const sort = sorts.order === 'byVotes' ? _.sortBy(comments,(comment)=>-comment.voteScore) : _.sortBy(comments,(comment)=>-comment.timeStamp)
         return(
             <div>
@@ -57,7 +57,6 @@ class PostsComments extends Component {
                                             <Options
                                                 path={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comment/edit/${comment.id}`}
                                                 comment={comment}
-                                                onClickDelete={deleteComment}
                                             />        
                                         </div>
                                     </div>
@@ -74,8 +73,7 @@ class PostsComments extends Component {
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-        voteComment, 
-        deleteComment, 
+        voteComment,  
         fetchComments, 
         orderByTime, 
         orderByVotes

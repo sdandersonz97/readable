@@ -10,7 +10,9 @@ export default function comments (state = INITIALSTATE, action){
         case FETCH_COMMENT:
             return { ...state, [payload.postId]: [...state[payload.postId], payload.data ]}
         case ADD_COMMENT:
-            return { ...state, [payload.id]: [...state[payload.id],payload.data]}
+            console.log(payload)
+            console.log(payload)
+            return { ...state, [payload.parentId]: [...state[payload.parentId],payload]}
         case EDIT_COMMENT:
             const a = state[payload.data.parentId]
             const i = state[payload.data.parentId].findIndex((element)=>{return element.id === payload.data.id})

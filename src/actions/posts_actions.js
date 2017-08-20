@@ -17,7 +17,7 @@ export function addPost(values,callback){
                 type:ADD_POST,
                 payload:data
             })
-        }).then(()=>callback())
+        }).then(()=>{dispatch(fetchPosts())}).then(()=>callback())
     }
 }
 export function editPost(id,values,callback){
@@ -42,7 +42,7 @@ export function deletePost(id, callback){
                 type:DELETE_POST,
                 payload:id
             })
-        }).then(()=>callback)
+        }).then(()=>callback())
     }
 }
 export function fetchPosts(){
@@ -56,8 +56,8 @@ export function fetchPosts(){
             })
             data.map(post=>{
                 dispatch(fetchComments(post.id))
-            })  
-        }) 
+            }) 
+        }).then((data)=>console.log(data)) 
     }
 }
 export function fetchPost(id){
