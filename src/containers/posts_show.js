@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom'
 import { fetchPost, votePost } from '../actions/posts_actions'
 import Options from '../components/options'
 import PostComments from './post_comments'
-import { bindActionCreators } from 'redux'
 import moment from 'moment'
 class PostsShow extends Component{
     componentDidMount(){
         const { postId } = this.props.match.params
-        if(!this.props.post){
-            this.props.fetchPost(postId)
-        }
+        !this.props.post
+            ? this.props.fetchPost(postId)
+            : ''
     }
     renderVotes(id, voteScore){
         const { votePost } = this.props
@@ -28,9 +27,9 @@ class PostsShow extends Component{
     }
     render(){
         const {post} = this.props
-        
+        let notFound = false
         if(!post){
-            return <div>Loading...</div>
+            return  <div>loading....</div>
         }
         let time = moment(post.timestamp).format("h:mm:ss DD-MM-YYYY ")
         return(
@@ -40,9 +39,9 @@ class PostsShow extends Component{
                     <div className="col-md-12">
                         <div className="row ">
                             <div className="col-md-10">
-                                <p className="h4">{post.title}</p> 
+                                <p className="h4 title">{post.title}</p> 
                             </div>
-                            <div className="col-md-1">
+                            <div className="col-md-12" style={{'text-align':'end'}}>
                                 <Options
                                     post={post}
                                     path={`/posts/edit/${post.id}`}
@@ -72,15 +71,10 @@ class PostsShow extends Component{
         )
     }
 }
-function mapDispatchToProps(dispatch){
-    return bindActionCreators({
-        fetchPost, 
-        votePost, 
-    }, dispatch)
-}
+
 function mapStateToProps({ posts },ownProps){
     return{
         post:posts[ownProps.match.params.postId],
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(PostsShow)
+export default connect(mapStateToProps,{ fetchPost, votePost })(PostsShow)

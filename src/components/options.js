@@ -12,16 +12,13 @@ class Options extends Component {
             ? deletePost(this.props.match.params.postId, ()=>this.props.history.push('/'))
             : deleteComment(this.props.match.params.postId,CurrentId)}
         return(
-            <div className="dropdown">
-                <Link  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" to="#">
-                    <i className="material-icons">settings</i>
-                    <span className="sr-only">Toggle Dropdown</span>
-                </Link>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <Link className="dropdown-item" to={path}>Edit</Link>
-                    <Link className="dropdown-item" onClick={()=>onClickDelete()} to="#">Remove</Link>
-                </div>
-            </div>    
+            <div>
+                <small>
+                    <Link to={path}>Edit </Link>
+                    | 
+                    <Link onClick={()=>onClickDelete()} to="#"> Delete</Link>
+                </small>
+            </div>
         )
     }
 }

@@ -124,4 +124,4 @@ PostsForm = reduxForm({
     
 })(PostsForm)
 
-export default connect(mapStateToProps,{addPost, editPost, fetchPost})(PostsForm)
+export default connect(mapStateToProps,{ addPost, editPost, fetchPost })(PostsForm)

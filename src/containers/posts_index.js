@@ -5,7 +5,6 @@ import { orderByTime, orderByVotes } from '../actions/sorts_actions'
 import { fetchComments } from '../actions/comments_actions'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { bindActionCreators } from 'redux'
 import NavOrderTab from '../components/nav_order_tab'
 class PostsIndex extends Component {
     componentDidMount(){
@@ -65,15 +64,7 @@ class PostsIndex extends Component {
         )
     }
 }
-function mapDispatchToProps(dispatch){
-    return bindActionCreators({
-        fetchPosts, 
-        fetchComments, 
-        votePost,
-        orderByTime, 
-        orderByVotes 
-    },dispatch)
-}
+
 function mapStateToProps({posts, comments,sorts},ownProps){
     if(ownProps.match.params.category){
         return {
@@ -84,4 +75,10 @@ function mapStateToProps({posts, comments,sorts},ownProps){
     }
     return { posts, comments,sorts: sorts.posts }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(PostsIndex)
+export default connect(mapStateToProps,{
+    fetchPosts, 
+    fetchComments, 
+    votePost,
+    orderByTime, 
+    orderByVotes
+})(PostsIndex)

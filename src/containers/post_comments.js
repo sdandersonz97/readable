@@ -46,14 +46,14 @@ class PostsComments extends Component {
                     >
                         {_.map(sort,(comment)=>{
                             return(
-                                <li  key={comment.id}>
+                                <li  key={comment.id} >
                                     <div className="row">
                                         {this.renderVotes(comment.id, comment.voteScore)}
-                                        <div className="col-md-10">
+                                        <div className="col-md-10 comments">
                                             <strong> {comment.author} </strong><br/>
                                             {comment.body}
                                         </div>
-                                        <div className="col-md-1">
+                                        <div className="col-md-12">
                                             <Options
                                                 path={`/categories/${this.props.match.params.category}/posts/${this.props.match.params.postId}/comment/edit/${comment.id}`}
                                                 comment={comment}
